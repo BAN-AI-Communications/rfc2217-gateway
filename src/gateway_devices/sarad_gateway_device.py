@@ -25,8 +25,7 @@ class SaradGatewayDevice(GenericGatewayDevice):
         self.__cluster = SaradCluster()
         try:
             self.__devi = self.__cluster.update_connected_instruments(
-                [self.get_serial_port()]
-            )
+                [self.get_serial_port()])
         except Exception:
             logger.error(f"USB Device Access Failed {device}")
             pass
@@ -35,9 +34,8 @@ class SaradGatewayDevice(GenericGatewayDevice):
     def get_serial_id(self):
 
         if len(self.__devi) == 1:
-            return "{}:{}".format(
-                self.device.get("ID_MODEL", ""), self.__devi[0].get_id()
-            )
+            return "{}:{}".format(self.device.get("ID_MODEL", ""),
+                                  self.__devi[0].get_id())
         else:
             return self.device.get("ID_SERIAL", "")
 
