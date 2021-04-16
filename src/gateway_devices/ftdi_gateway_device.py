@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-
 import logging
+
 from gateway_devices.generic_gateway_device import GenericGatewayDevice
 
 logger = logging.getLogger(__name__)
 
+
 def get_class():
     return FTDIGatewayDevice
+
 
 class FTDIGatewayDevice(GenericGatewayDevice):
 
@@ -16,5 +18,5 @@ class FTDIGatewayDevice(GenericGatewayDevice):
     ID_VENDOR_ENC = "FTDI"
     PORT = 5581
 
-    def get_name_unique(self):    
-        return f'{self.get_serial_short()}'
+    def get_name_unique(self):
+        return f"{self.get_serial_short()}"
