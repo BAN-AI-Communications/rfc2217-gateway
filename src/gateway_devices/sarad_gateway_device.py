@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 import logging
 
-from gateway_devices.generic_gateway_device import GenericGatewayDevice
 from SarI import SaradCluster
+
+from gateway_devices.generic_gateway_device import GenericGatewayDevice
 
 logger = logging.getLogger(__name__)
 

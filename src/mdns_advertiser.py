@@ -5,8 +5,7 @@ import threading
 import time
 
 import netifaces as ni
-from zeroconf import ServiceInfo
-from zeroconf import Zeroconf
+from zeroconf import ServiceInfo, Zeroconf
 
 logger = logging.getLogger(__name__)
 

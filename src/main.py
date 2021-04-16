@@ -3,8 +3,9 @@ import logging
 import signal
 import time
 
-import config
 import pyudev
+
+import config
 from usb_devices_handler import UsbDevicesHandler
 
 logging.basicConfig(
