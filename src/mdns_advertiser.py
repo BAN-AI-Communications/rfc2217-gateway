@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-
 import logging
 import socket
 import threading
 import time
 
 import netifaces as ni
-from zeroconf import ServiceInfo, Zeroconf
+from zeroconf import ServiceInfo
+from zeroconf import Zeroconf
 
 logger = logging.getLogger(__name__)
 
