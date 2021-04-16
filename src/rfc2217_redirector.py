@@ -9,13 +9,14 @@
 
 import logging
 import socket
+import sys
 import threading
 import time
 
 import serial.rfc2217
 
 
-class Redirector:
+class Redirector(object):
     def __init__(self, serial_instance, socket, debug=False):
         self.serial = serial_instance
         self.socket = socket
@@ -29,14 +30,14 @@ class Redirector:
         self.log = logging.getLogger("redirector")
 
     def statusline_poller(self):
-        self.log.debug("Status line poll thread started")
+        self.log.debug("status line poll thread started")
         while self.alive:
             time.sleep(0.5)
             try:
                 self.rfc2217.check_modem_lines()
             except OSError:
                 break
-        self.log.debug("Status line poll thread terminated")
+        self.log.debug("status line poll thread terminated")
 
     def shortcircuit(self):
         """connect the serial port to the TCP port by copying everything
@@ -54,34 +55,23 @@ class Redirector:
 
     def reader(self):
         """loop forever and copy serial->socket"""
-        self.log.info("Reader started")
         while self.alive:
             try:
                 data = self.serial.read(self.serial.in_waiting or 1)
                 if data:
-                    # escape outgoing data when needed
-                    # (Telnet IAC (0xff) character)
-                    self.log.info("--> %s", list(self.rfc2217.escape(data)))
+                    # escape outgoing data when needed (Telnet IAC (0xff) character)
                     self.write(b"".join(self.rfc2217.escape(data)))
             except socket.error as msg:
-                self.log.error("%s", msg)
+                self.log.error("{}".format(msg))
                 # probably got disconnected
                 break
         self.alive = False
-        self.log.debug("Reader thread terminated")
+        self.log.debug("reader thread terminated")
 
     def write(self, data):
-        """thread safe socket write with no data escaping.
-        Used to send telnet stuff"""
-        retries = 3
+        """thread safe socket write with no data escaping. used to send telnet stuff"""
         with self._write_lock:
-            while retries:
-                try:
-                    self.socket.sendall(data)
-                    retries = 0
-                except:
-                    self.log.debug("retry --> %s", data)
-                    retries -= 1
+            self.socket.sendall(data)
 
     def writer(self):
         """loop forever and copy socket->serial"""
@@ -90,15 +80,11 @@ class Redirector:
                 data = self.socket.recv(1024)
                 if not data:
                     break
-                self.log.info("<-- %s", list(self.rfc2217.filter(data)))
                 self.serial.write(b"".join(self.rfc2217.filter(data)))
-                self.log.debug("serial.write")
-                self.log.debug("%s", b"".join(self.rfc2217.filter(data)))
             except socket.timeout:
-                self.log.debug("socket timeout")
                 pass
             except socket.error as msg:
-                self.log.error("Writer error: %s", msg)
+                self.log.error("Writer error: {}".format(msg))
                 # probably got disconnected
                 break
         self.stop()

@@ -2,15 +2,15 @@
 
 import logging
 import time
-import threading
-from typing import Type
+
 import serial
+
 from gateway_devices.generic_gateway_device import GenericGatewayDevice
 
 logger = logging.getLogger(__name__)
 
 
-def get_class() -> Type[GenericGatewayDevice]:
+def get_class():
     return ZWaveGatewayDevice
 
 
@@ -35,10 +35,10 @@ class ZWaveGatewayDevice(GenericGatewayDevice):
         return properties
 
 
-class ZWaveHomeIdHandler():
+class ZWaveHomeIdHandler(object):
 
-    NAK = b'\x15'
-    MEMORY_ID_COMMAND = b'\x01\x03\x00\x20\xdc'
+    NAK = b"\x15"
+    MEMORY_ID_COMMAND = b"\x01\x03\x00\x20\xdc"
 
     def __init__(self, serial_port):
         self.home_id = None
@@ -68,18 +68,20 @@ class ZWaveHomeIdHandler():
         self.stop()
 
 
-class ZWaveHomeIdReceiver():
+class ZWaveHomeIdReceiver(object):
+
+    import threading
 
     SEARCH_SOF = 0
     SEARCH_LEN = 1
     SEARCH_DAT = 2
 
-    SOF = b'\x01'
-    ACK = b'\x06'
-    NAK = b'\x15'
-    CAN = b'\x18'
+    SOF = b"\x01"
+    ACK = b"\x06"
+    NAK = b"\x15"
+    CAN = b"\x18"
 
-    TIMEOUT = b''
+    TIMEOUT = b""
 
     def __init__(self, serial_connection, on_home_id_received):
         self.zwave_connection = serial_connection
@@ -118,7 +120,7 @@ class ZWaveHomeIdReceiver():
                 elif next_byte in [self.NAK, self.CAN]:
                     logger.error("Unexpected command")
                 else:
-                    logger.error("Unkown '%s'", next_byte)
+                    logger.error("Unkown '{}'".format(next_byte))
             elif self.rx_state == self.SEARCH_LEN:
                 self.message_length = int.from_bytes(next_byte, "big")
                 self.rx_state = self.SEARCH_DAT
@@ -157,5 +159,5 @@ class ZWaveHomeIdReceiver():
             hex_value = hex(message[i])
             home_id += hex_value[-2:]
 
-        logger.info("Home ID: %s", home_id)
+        logger.info("Home ID: {}".format(home_id))
         return home_id

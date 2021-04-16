@@ -2,16 +2,16 @@
 
 import logging
 import socket
-import time
 import threading
-import netifaces as ni
+import time
 
+import netifaces as ni
 from zeroconf import ServiceInfo, Zeroconf
 
 logger = logging.getLogger(__name__)
 
 
-class MDNSAdvertiser():
+class MDNSAdvertiser(object):
     def __init__(self, type_, name, port, properties, server, interface):
         self.type = type_
         self.name = name
@@ -26,7 +26,7 @@ class MDNSAdvertiser():
         self.alive = None
 
     @staticmethod
-    def get_network_ip_address(interface='eth0'):
+    def get_network_ip_address(interface="eth0"):
         """
         Get the first IP address of a network interface.
         :param interface: The name of the interface.
@@ -34,13 +34,14 @@ class MDNSAdvertiser():
         """
 
         if interface not in ni.interfaces():
-            logger.error('Could not find interface %s.', interface)
+            logger.error("Could not find interface {}.".format(interface))
             return None
         interface = ni.ifaddresses(interface)
         if (2 not in interface) or (len(interface[2]) == 0):
-            logger.warning('Could not find IP of interface %s.', interface)
+            logger.warning(
+                "Could not find IP of interface {}.".format(interface))
             return None
-        return interface[2][0]['addr']
+        return interface[2][0]["addr"]
 
     def start(self):
         self.alive = True
@@ -71,21 +72,22 @@ class MDNSAdvertiser():
             logger.debug("mDNS advertiser started")
 
     def __start_advertising(self):
-        self.service = ServiceInfo("{}._tcp.local.".format(self.type),
-                                   "{}.{}._tcp.local.".format(
-                                       self.name, self.type),
-                                   port=self.port,
-                                   weight=0,
-                                   priority=0,
-                                   properties=self.properties,
-                                   server="{}.local.".format(self.server),
-                                   addresses=[socket.inet_aton(self.address)])
+        self.service = ServiceInfo(
+            "{}._tcp.local.".format(self.type),
+            "{}.{}._tcp.local.".format(self.name, self.type),
+            port=self.port,
+            weight=0,
+            priority=0,
+            properties=self.properties,
+            server="{}.local.".format(self.server),
+            addresses=[socket.inet_aton(self.address)],
+        )
 
         zeroconf = Zeroconf()
         zeroconf.register_service(self.service)
 
         while self.alive:
-            time.sleep(.5)
+            time.sleep(0.5)
 
         zeroconf.unregister_service(self.service)
         zeroconf.close()

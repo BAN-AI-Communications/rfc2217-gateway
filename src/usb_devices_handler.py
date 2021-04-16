@@ -10,10 +10,10 @@ from rfc2217_device import RFC2217Device
 logger = logging.getLogger(__name__)
 
 
-class UsbDevicesHandler:
+class UsbDevicesHandler(object):
     def __init__(self, network_interface):
         self.network_interface = network_interface
-        self.valid_gateways = gateway_devices.device_classes
+        self.valid_gateways = gateway_devices.__all__
         self.handled_devices = {}
 
     def is_valid_device(self, device):
@@ -25,7 +25,7 @@ class UsbDevicesHandler:
     def create_usb_device(self, device):
         ident = device.get("DEVNAME")
         if ident in self.handled_devices:
-            logger.warning("Device at '%s' already handled", ident)
+            logger.warn("Device at '{}' already handled".format(ident))
             return
 
         constructor = self.__get_gateway_constructor(device)
@@ -43,7 +43,7 @@ class UsbDevicesHandler:
 
         device = self.handled_devices.get(ident, None)
         if not device:
-            logger.warning("Device at '%s' not handled", ident)
+            logger.warn("Device at '{}' not handled".format(ident))
             return
 
         device.stop()
@@ -66,29 +66,29 @@ class UsbDevicesHandler:
 
     def __get_gateway_constructor(self, device):
         device_identifier = self.__get_device_identifier(device)
-        logger.debug("Device identifier: %s", device_identifier)
         if not device_identifier:
             return None
         return self.valid_gateways.get(device_identifier, None)
 
 
-class UsbDevice:
+class UsbDevice(object):
     def __init__(self, gateway_device, network_interface):
         self.gateway_device = gateway_device
-        logger.debug("Gateway device: %s", gateway_device)
         self.network_interface = network_interface
         self.rfc2217_connection = None
         self.mdns_advertiser = None
 
     def start(self):
         logger.info(
-            "Device '%s' ('%s') - type %s - has been created on port %s",
-            self.gateway_device.get_name(),
-            self.gateway_device.get_serial_port(),
-            self.gateway_device.__class__.__name__,
-            self.gateway_device.get_tcp_port(),
-        )
-        __type = "_rfc2217"
+            "Device '{}' ('{}') - type {} - has been created on port {}".
+            format(
+                self.gateway_device.get_name(),
+                self.gateway_device.get_serial_port(),
+                self.gateway_device.__class__.__name__,
+                self.gateway_device.get_tcp_port(),
+            ))
+        __type = ("_{}._rfc2217".format(self.gateway_device.get_protocol())
+                  if self.gateway_device.get_protocol() else "_rfc2217")
         self.mdns_advertiser = MDNSAdvertiser(
             __type,
             self.gateway_device.get_name_unique(),
@@ -98,8 +98,8 @@ class UsbDevice:
             self.network_interface,
         )
         self.rfc2217_connection = RFC2217Device(
-            self.gateway_device.get_serial_port(), self.gateway_device.get_tcp_port()
-        )
+            self.gateway_device.get_serial_port(),
+            self.gateway_device.get_tcp_port())
         self.rfc2217_connection.start()
         self.mdns_advertiser.start()
 
@@ -108,11 +108,9 @@ class UsbDevice:
             self.rfc2217_connection.stop()
         if self.mdns_advertiser:
             self.mdns_advertiser.stop()
-        logger.info(
-            "Device '%s' ('%s') has been deleted",
+        logger.info("Device '{}' ('{}') has been deleted".format(
             self.gateway_device.get_name(),
-            self.gateway_device.get_serial_port(),
-        )
+            self.gateway_device.get_serial_port()))
 
     def get_serial_port(self):
         return self.gateway_device.get_serial_port()
