@@ -5,7 +5,6 @@ import threading
 import time
 
 import serial
-
 from rfc2217_redirector import Redirector
 
 logger = logging.getLogger(__name__)
