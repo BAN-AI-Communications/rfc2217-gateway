@@ -8,7 +8,6 @@
 # SPDX-License-Identifier:    BSD-3-Clause
 import logging
 import socket
-import sys
 import threading
 import time
 
