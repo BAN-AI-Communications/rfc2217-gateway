@@ -3,10 +3,9 @@ import logging
 
 from SarI import SaradCluster
 
-
-logger = logging.getLogger(__name__)
 from gateway_devices.generic_gateway_device import GenericGatewayDevice
 
+logger = logging.getLogger(__name__)
 
 
 def get_class():
