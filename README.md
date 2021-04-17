@@ -9,12 +9,12 @@ Gateway that shares (USB) serial devices using RFC-2217.
 The program has the following features:
 
 - Detects plugged and unplugged USB (udev)
-- Shares the serial connection through RFC2217
+- Shares the serial connection through RFC-2217
 - Announces the RFC-2217 connection to the rest of the network (mDNS)
 
 ## Author
 
-(c) 2020 [Aitor Iturrioz](https://github.com/bodiroga)
+Copyright (C) 2020 [Aitor Iturrioz](https://github.com/bodiroga)
 
 ## License
 
