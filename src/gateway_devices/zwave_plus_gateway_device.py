@@ -34,7 +34,7 @@ class ZWavePlusGatewayDevice(GenericGatewayDevice):
         return properties
 
 
-class ZWaveHomeIdHandler(object):
+class ZWaveHomeIdHandler:
 
     NAK = b"\x15"
     MEMORY_ID_COMMAND = b"\x01\x03\x00\x20\xdc"
@@ -67,7 +67,7 @@ class ZWaveHomeIdHandler(object):
         self.stop()
 
 
-class ZWaveHomeIdReceiver(object):
+class ZWaveHomeIdReceiver:
 
     SEARCH_SOF = 0
     SEARCH_LEN = 1
