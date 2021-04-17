@@ -29,7 +29,6 @@ class SaradGatewayDevice(GenericGatewayDevice):
                 [self.get_serial_port()])
         except Exception:
             logger.error(f"USB Device Access Failed {device}")
-            pass
         self.get_properties()
 
     def get_serial_id(self):
