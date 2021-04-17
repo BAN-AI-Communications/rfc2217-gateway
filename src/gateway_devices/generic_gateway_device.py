@@ -6,7 +6,7 @@ import threading
 logger = logging.getLogger(__name__)
 
 
-class GenericGatewayDevice(object):
+class GenericGatewayDevice:
 
     NAME = ""
     ID_MODEL_ID = ""
