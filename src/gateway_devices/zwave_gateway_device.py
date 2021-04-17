@@ -144,7 +144,8 @@ class ZWaveHomeIdReceiver(object):
 
         logger.debug("ZWave Reader thread stopped")
 
-    def __get_home_id(self, message):
+    @staticmethod
+    def __get_home_id(message):
         if message[0] != 1:  # Check if the message is a response message (1)
             return -1
         if message[
