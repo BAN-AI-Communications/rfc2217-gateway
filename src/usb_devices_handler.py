@@ -40,7 +40,7 @@ class UsbDevicesHandler(object):
     def delete_usb_device(self, device):
         ident = device.get("DEVNAME")
 
-        device = self.handled_devices.get(ident, None)
+        device = self.handled_devices.get(ident)
         if not device:
             logger.warn("Device at '{}' not handled".format(ident))
             return
@@ -67,7 +67,7 @@ class UsbDevicesHandler(object):
         device_identifier = self.__get_device_identifier(device)
         if not device_identifier:
             return None
-        return self.valid_gateways.get(device_identifier, None)
+        return self.valid_gateways.get(device_identifier)
 
 
 class UsbDevice(object):
