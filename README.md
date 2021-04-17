@@ -1,4 +1,4 @@
-## Introduction
+## RFC-2217 Gateway
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/e4e1855af9223bf9fb43/maintainability)](https://codeclimate.com/github/BAN-AI-Communications/rfc2217-gateway/maintainability)
 
