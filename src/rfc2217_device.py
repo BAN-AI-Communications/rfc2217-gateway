@@ -53,12 +53,10 @@ class RFC2217Device:
         self.s_port.close()
         self.s_socket.shutdown(socket.SHUT_RDWR)
         self.s_socket.close()
-        logger.debug("RFCDevice '{}' completely stopped".format(
-            self.device_path))
+        logger.debug("RFCDevice '{}' completely stopped".format(self.device_path))
 
     def __start(self):
-        logger.debug("RFCDevice ('{}') main loop started".format(
-            self.device_path))
+        logger.debug("RFCDevice ('{}') main loop started".format(self.device_path))
         while self.started:
             try:
                 client_socket, addr = self.s_socket.accept()
@@ -84,5 +82,4 @@ class RFC2217Device:
                     self.s_port.dtr = False
                 except:
                     pass
-        logger.debug("RFCDevice ('{}') main loop stopped".format(
-            self.device_path))
+        logger.debug("RFCDevice ('{}') main loop stopped".format(self.device_path))
