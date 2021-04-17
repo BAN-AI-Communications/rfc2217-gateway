@@ -2,7 +2,7 @@
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/e4e1855af9223bf9fb43/maintainability)](https://codeclimate.com/github/BAN-AI-Communications/rfc2217-gateway/maintainability)
 
-Gateway that shares different USB sticks through RFC2217.
+Gateway that shares (USB) serial devices using RFC-2217.
 
 ## Features
 
