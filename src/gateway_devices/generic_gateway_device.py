@@ -35,8 +35,7 @@ class GenericGatewayDevice(object):
 
         self.device = device
         if self.PORT_RANGE:
-            if len(self.PORT_RANGE
-                   ) != 2 or self.PORT_RANGE[0] > self.PORT_RANGE[1]:
+            if len(self.PORT_RANGE) != 2 or self.PORT_RANGE[0] > self.PORT_RANGE[1]:
                 raise Exception("USB device has invalid PORT_RANGE")
             with self._lock:
                 if not self._isPortRangeInit:
@@ -45,8 +44,7 @@ class GenericGatewayDevice(object):
                         self._availablePorts.append(i)
 
                     if not self._availablePorts:
-                        raise Exception(
-                            "USB device has no more available Ports")
+                        raise Exception("USB device has no more available Ports")
 
                 self._selectedPort = self._availablePorts.pop()
         else:
@@ -103,8 +101,8 @@ class GenericGatewayDevice(object):
                 self.get_serial_short(),
             )
         return "RFC2217 ({}:{})".format(
-            self.gateway_device.get_id_vendor(),
-            self.gateway_device.get_id_model())
+            self.gateway_device.get_id_vendor(), self.gateway_device.get_id_model()
+        )
 
     def get_properties(self):
         model_id = self.device.get("ID_MODEL_ID", "")
