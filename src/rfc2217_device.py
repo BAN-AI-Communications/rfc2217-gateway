@@ -20,7 +20,8 @@ class RFC2217Device(object):
         self.s_redirector = None
         self.started = False
 
-    def connect_serial_port(self, port_path):
+    @staticmethod
+    def connect_serial_port(port_path):
         ser = serial.serial_for_url(port_path, do_not_open=True)
         ser.timeout = 3
         ser.dtr = False
@@ -29,7 +30,8 @@ class RFC2217Device(object):
 
         return ser
 
-    def create_socket(self, port):
+    @staticmethod
+    def create_socket(port):
         srv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         srv.bind(("", port))

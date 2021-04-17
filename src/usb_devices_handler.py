@@ -54,7 +54,8 @@ class UsbDevicesHandler(object):
 
         self.handled_devices = {}
 
-    def __get_device_identifier(self, device):
+    @staticmethod
+    def __get_device_identifier(device):
         id_model = device.get("ID_MODEL_ID")
         id_vendor = device.get("ID_VENDOR_ID")
         enc_vendor = device.get("ID_VENDOR_ENC")
