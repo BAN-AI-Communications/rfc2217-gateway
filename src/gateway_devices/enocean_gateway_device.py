@@ -14,6 +14,7 @@ def get_class() -> Type[GenericGatewayDevice]:
 
 class EnoceanGatewayDevice(GenericGatewayDevice):
     """USB parameters identifying EnOcean devices"""
+
     NAME = "Enocean"
     ID_MODEL_ID = "6001"
     ID_VENDOR_ID = "0403"

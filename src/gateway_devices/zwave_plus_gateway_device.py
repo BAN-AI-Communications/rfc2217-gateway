@@ -35,19 +35,20 @@ class ZWavePlusGatewayDevice(GenericGatewayDevice):
         return properties
 
 
-class ZWaveHomeIdHandler():
+class ZWaveHomeIdHandler:
 
-    NAK = b'\x15'
-    MEMORY_ID_COMMAND = b'\x01\x03\x00\x20\xdc'
+    NAK = b"\x15"
+    MEMORY_ID_COMMAND = b"\x01\x03\x00\x20\xdc"
 
     def __init__(self, serial_port):
         self.home_id = None
         self.serial_port = serial_port
-        self.zwave_connection = serial.Serial(self.serial_port,
-                                              baudrate=115200,
-                                              timeout=0.1)
-        self.zwave_receiver = ZWaveHomeIdReceiver(self.zwave_connection,
-                                                  self.__on_home_id_received)
+        self.zwave_connection = serial.Serial(
+            self.serial_port, baudrate=115200, timeout=0.1
+        )
+        self.zwave_receiver = ZWaveHomeIdReceiver(
+            self.zwave_connection, self.__on_home_id_received
+        )
         self.zwave_receiver.start()
 
     def start(self):
@@ -68,18 +69,18 @@ class ZWaveHomeIdHandler():
         self.stop()
 
 
-class ZWaveHomeIdReceiver():
+class ZWaveHomeIdReceiver:
 
     SEARCH_SOF = 0
     SEARCH_LEN = 1
     SEARCH_DAT = 2
 
-    SOF = b'\x01'
-    ACK = b'\x06'
-    NAK = b'\x15'
-    CAN = b'\x18'
+    SOF = b"\x01"
+    ACK = b"\x06"
+    NAK = b"\x15"
+    CAN = b"\x18"
 
-    TIMEOUT = b''
+    TIMEOUT = b""
 
     def __init__(self, serial_connection, on_home_id_received):
         self.zwave_connection = serial_connection
@@ -140,8 +141,9 @@ class ZWaveHomeIdReceiver():
                     self.rx_length = 0
                     self.message_length = 0
                     self.zwave_connection.write(self.ACK)
-                    threading.Thread(target=self.on_home_id_received,
-                                     args=[home_id]).start()
+                    threading.Thread(
+                        target=self.on_home_id_received, args=[home_id]
+                    ).start()
                 else:
                     logger.error("Incorrect Home ID received!")
 
@@ -150,8 +152,7 @@ class ZWaveHomeIdReceiver():
     def __get_home_id(self, message):
         if message[0] != 1:  # Check if the message is a response message (1)
             return -1
-        if message[
-                1] != 32:  # Check if the message is a response to a 0x20 message
+        if message[1] != 32:  # Check if the message is a response to a 0x20 message
             return -1
         if message[-2] != 1:  # Check if node id is 1
             return -1
