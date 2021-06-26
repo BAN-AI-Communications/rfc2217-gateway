@@ -28,8 +28,7 @@ class FTDIGatewayDevice(GenericGatewayDevice):
         self.__cluster = SaradCluster()
         try:
             self.__devi = self.__cluster.update_connected_instruments(
-                [device.get("DEVNAME")]
-            )
+                [device.get("DEVNAME")])
         except Exception:  # pylint: disable=broad-except
             logger.error("USB device access failed %s", device)
         self.get_properties()
@@ -45,16 +44,26 @@ class FTDIGatewayDevice(GenericGatewayDevice):
             serial_short = f"{self.__devi[0].device_id}.{self.get_protocol()}"
             self.serial = serial_short
             return {
-                "MODEL_ID": self.device.get("ID_MODEL_ID", ""),
-                "MODEL": model,
-                "MODEL_ENC": self.device.get("ID_MODEL_ENC", ""),
-                "MODEL_DB": self.device.get("ID_MODEL_FROM_DATABASE", ""),
-                "VENDOR_ID": self.device.get("ID_VENDOR_ID", ""),
-                "VENDOR": self.device.get("ID_VENDOR_FROM_DATABASE", ""),
-                "VENDOR_ENC": self.device.get("ID_VENDOR_ENC", ""),
-                "VENDOR_DB": self.device.get("ID_VENDOR_FROM_DATABASE", ""),
-                "SERIAL": f"{model}_{serial_short}",
-                "SERIAL_SHORT": f"{self.__devi[0].device_id}.{self.get_protocol()}",
+                "MODEL_ID":
+                self.device.get("ID_MODEL_ID", ""),
+                "MODEL":
+                model,
+                "MODEL_ENC":
+                self.device.get("ID_MODEL_ENC", ""),
+                "MODEL_DB":
+                self.device.get("ID_MODEL_FROM_DATABASE", ""),
+                "VENDOR_ID":
+                self.device.get("ID_VENDOR_ID", ""),
+                "VENDOR":
+                self.device.get("ID_VENDOR_FROM_DATABASE", ""),
+                "VENDOR_ENC":
+                self.device.get("ID_VENDOR_ENC", ""),
+                "VENDOR_DB":
+                self.device.get("ID_VENDOR_FROM_DATABASE", ""),
+                "SERIAL":
+                f"{model}_{serial_short}",
+                "SERIAL_SHORT":
+                f"{self.__devi[0].device_id}.{self.get_protocol()}",
             }
         return super().get_properties()
 
