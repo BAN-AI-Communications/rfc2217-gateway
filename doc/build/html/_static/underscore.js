@@ -13,7 +13,7 @@
     if (c._chain) c = c._wrapped;
     if (a.isEqual && b.isFunction(a.isEqual)) return a.isEqual(c);
     if (c.isEqual && b.isFunction(c.isEqual)) return c.isEqual(a);
-    var e = l.call(a);
+    const e = l.call(a);
     if (e != l.call(c)) return false;
     switch (e) {
       case "[object String]":
@@ -31,22 +31,25 @@
           a.ignoreCase == c.ignoreCase
         );
     }
-    if (typeof a != "object" || typeof c != "object") return false;
+    if (typeof a !== "object" || typeof c !== "object") return false;
     for (var f = d.length; f--; ) if (d[f] == a) return true;
     d.push(a);
-    var f = 0,
-      g = true;
+    var f = 0;
+    let g = true;
     if (e == "[object Array]") {
-      if (((f = a.length), (g = f == c.length)))
+      if (((f = a.length), (g = f == c.length))) {
         for (; f--; ) if (!(g = f in a == f in c && q(a[f], c[f], d))) break;
+      }
     } else {
       if (
         "constructor" in a != "constructor" in c ||
         a.constructor != c.constructor
-      )
+      ) {
         return false;
-      for (var h in a)
+      }
+      for (var h in a) {
         if (b.has(a, h) && (f++, !(g = b.has(c, h) && q(a[h], c[h], d)))) break;
+      }
       if (g) {
         for (h in c) if (b.has(c, h) && !f--) break;
         g = !f;
@@ -55,51 +58,54 @@
     d.pop();
     return g;
   }
-  var r = this,
-    G = r._,
-    n = {},
-    k = Array.prototype,
-    o = Object.prototype,
-    i = k.slice,
-    H = k.unshift,
-    l = o.toString,
-    I = o.hasOwnProperty,
-    w = k.forEach,
-    x = k.map,
-    y = k.reduce,
-    z = k.reduceRight,
-    A = k.filter,
-    B = k.every,
-    C = k.some,
-    p = k.indexOf,
-    D = k.lastIndexOf,
-    o = Array.isArray,
-    J = Object.keys,
-    s = Function.prototype.bind,
-    b = function (a) {
-      return new m(a);
-    };
+  const r = this;
+  const G = r._;
+  const n = {};
+  const k = Array.prototype;
+  var o = Object.prototype;
+  const i = k.slice;
+  const H = k.unshift;
+  var l = o.toString;
+  const I = o.hasOwnProperty;
+  const w = k.forEach;
+  const x = k.map;
+  const y = k.reduce;
+  const z = k.reduceRight;
+  const A = k.filter;
+  const B = k.every;
+  const C = k.some;
+  const p = k.indexOf;
+  const D = k.lastIndexOf;
+  var o = Array.isArray;
+  const J = Object.keys;
+  const s = Function.prototype.bind;
+  var b = function (a) {
+    return new m(a);
+  };
   if (typeof exports !== "undefined") {
-    if (typeof module !== "undefined" && module.exports)
+    if (typeof module !== "undefined" && module.exports) {
       exports = module.exports = b;
+    }
     exports._ = b;
   } else r._ = b;
   b.VERSION = "1.3.1";
-  var j =
+  const j =
     (b.each =
     b.forEach =
       function (a, c, d) {
-        if (a != null)
+        if (a != null) {
           if (w && a.forEach === w) a.forEach(c, d);
-          else if (a.length === +a.length)
+          else if (a.length === +a.length) {
             for (var e = 0, f = a.length; e < f; e++) {
               if (e in a && c.call(d, a[e], e, a) === n) break;
             }
-          else
+          } else {
             for (e in a) if (b.has(a, e) && c.call(d, a[e], e, a) === n) break;
+          }
+        }
       });
   b.map = b.collect = function (a, c, b) {
-    var e = [];
+    const e = [];
     if (a == null) return e;
     if (x && a.map === x) return a.map(c, b);
     j(a, function (a, g, h) {
@@ -112,37 +118,40 @@
     b.foldl =
     b.inject =
       function (a, c, d, e) {
-        var f = arguments.length > 2;
+        let f = arguments.length > 2;
         a == null && (a = []);
-        if (y && a.reduce === y)
+        if (y && a.reduce === y) {
           return e && (c = b.bind(c, e)), f ? a.reduce(c, d) : a.reduce(c);
+        }
         j(a, function (a, b, i) {
           f ? (d = c.call(e, d, a, b, i)) : ((d = a), (f = true));
         });
-        if (!f)
+        if (!f) {
           throw new TypeError("Reduce of empty array with no initial value");
+        }
         return d;
       };
   b.reduceRight = b.foldr = function (a, c, d, e) {
-    var f = arguments.length > 2;
+    const f = arguments.length > 2;
     a == null && (a = []);
-    if (z && a.reduceRight === z)
+    if (z && a.reduceRight === z) {
       return (
         e && (c = b.bind(c, e)), f ? a.reduceRight(c, d) : a.reduceRight(c)
       );
-    var g = b.toArray(a).reverse();
+    }
+    const g = b.toArray(a).reverse();
     e && !f && (c = b.bind(c, e));
     return f ? b.reduce(g, c, d, e) : b.reduce(g, c);
   };
   b.find = b.detect = function (a, c, b) {
-    var e;
+    let e;
     E(a, function (a, g, h) {
       if (c.call(b, a, g, h)) return (e = a), true;
     });
     return e;
   };
   b.filter = b.select = function (a, c, b) {
-    var e = [];
+    const e = [];
     if (a == null) return e;
     if (A && a.filter === A) return a.filter(c, b);
     j(a, function (a, g, h) {
@@ -151,7 +160,7 @@
     return e;
   };
   b.reject = function (a, c, b) {
-    var e = [];
+    const e = [];
     if (a == null) return e;
     j(a, function (a, g, h) {
       c.call(b, a, g, h) || (e[e.length] = a);
@@ -159,7 +168,7 @@
     return e;
   };
   b.every = b.all = function (a, c, b) {
-    var e = true;
+    let e = true;
     if (a == null) return e;
     if (B && a.every === B) return a.every(c, b);
     j(a, function (a, g, h) {
@@ -172,7 +181,7 @@
     b.any =
       function (a, c, d) {
         c || (c = b.identity);
-        var e = false;
+        let e = false;
         if (a == null) return e;
         if (C && a.some === C) return a.some(c, d);
         j(a, function (a, b, h) {
@@ -181,7 +190,7 @@
         return !!e;
       });
   b.include = b.contains = function (a, c) {
-    var b = false;
+    let b = false;
     if (a == null) return b;
     return p && a.indexOf === p
       ? a.indexOf(c) != -1
@@ -190,7 +199,7 @@
         }));
   };
   b.invoke = function (a, c) {
-    var d = i.call(arguments, 2);
+    const d = i.call(arguments, 2);
     return b.map(a, function (a) {
       return (b.isFunction(c) ? c || a : a[c]).apply(a, d);
     });
@@ -203,7 +212,7 @@
   b.max = function (a, c, d) {
     if (!c && b.isArray(a)) return Math.max.apply(Math, a);
     if (!c && b.isEmpty(a)) return -Infinity;
-    var e = { computed: -Infinity };
+    let e = { computed: -Infinity };
     j(a, function (a, b, h) {
       b = c ? c.call(d, a, b, h) : a;
       b >= e.computed && (e = { value: a, computed: b });
@@ -213,7 +222,7 @@
   b.min = function (a, c, d) {
     if (!c && b.isArray(a)) return Math.min.apply(Math, a);
     if (!c && b.isEmpty(a)) return Infinity;
-    var e = { computed: Infinity };
+    let e = { computed: Infinity };
     j(a, function (a, b, h) {
       b = c ? c.call(d, a, b, h) : a;
       b < e.computed && (e = { value: a, computed: b });
@@ -221,8 +230,8 @@
     return e.value;
   };
   b.shuffle = function (a) {
-    var b = [],
-      d;
+    const b = [];
+    let d;
     j(a, function (a, f) {
       f == 0
         ? (b[0] = a)
@@ -239,22 +248,22 @@
           return { value: a, criteria: c.call(d, a, b, g) };
         })
         .sort(function (a, b) {
-          var c = a.criteria,
-            d = b.criteria;
+          const c = a.criteria;
+          const d = b.criteria;
           return c < d ? -1 : c > d ? 1 : 0;
         }),
       "value"
     );
   };
   b.groupBy = function (a, c) {
-    var d = {},
-      e = b.isFunction(c)
-        ? c
-        : function (a) {
-            return a[c];
-          };
+    const d = {};
+    const e = b.isFunction(c)
+      ? c
+      : function (a) {
+          return a[c];
+        };
     j(a, function (a, b) {
-      var c = e(a, b);
+      const c = e(a, b);
       (d[c] || (d[c] = [])).push(a);
     });
     return d;
@@ -262,7 +271,7 @@
   b.sortedIndex = function (a, c, d) {
     d || (d = b.identity);
     for (var e = 0, f = a.length; e < f; ) {
-      var g = (e + f) >> 1;
+      const g = (e + f) >> 1;
       d(a[g]) < d(c) ? (e = g + 1) : (f = g);
     }
     return e;
@@ -315,13 +324,14 @@
     return b.difference(a, i.call(arguments, 1));
   };
   b.uniq = b.unique = function (a, c, d) {
-    var d = d ? b.map(a, d) : a,
-      e = [];
+    var d = d ? b.map(a, d) : a;
+    const e = [];
     b.reduce(
       d,
       function (d, g, h) {
-        if (0 == h || (c === true ? b.last(d) != g : !b.include(d, g)))
+        if (h == 0 || (c === true ? b.last(d) != g : !b.include(d, g))) {
           (d[d.length] = g), (e[e.length] = a[h]);
+        }
         return d;
       },
       []
@@ -332,7 +342,7 @@
     return b.uniq(b.flatten(arguments, true));
   };
   b.intersection = b.intersect = function (a) {
-    var c = i.call(arguments, 1);
+    const c = i.call(arguments, 1);
     return b.filter(b.uniq(a), function (a) {
       return b.every(c, function (c) {
         return b.indexOf(c, a) >= 0;
@@ -340,7 +350,7 @@
     });
   };
   b.difference = function (a) {
-    var c = b.flatten(i.call(arguments, 1));
+    const c = b.flatten(i.call(arguments, 1));
     return b.filter(a, function (a) {
       return !b.include(c, a);
     });
@@ -353,13 +363,14 @@
         e = 0;
       e < c;
       e++
-    )
+    ) {
       d[e] = b.pluck(a, "" + e);
+    }
     return d;
   };
   b.indexOf = function (a, c, d) {
     if (a == null) return -1;
-    var e;
+    let e;
     if (d) return (d = b.sortedIndex(a, c)), a[d] === c ? d : -1;
     if (p && a.indexOf === p) return a.indexOf(c);
     for (d = 0, e = a.length; d < e; d++) if (d in a && a[d] === c) return d;
@@ -368,7 +379,7 @@
   b.lastIndexOf = function (a, b) {
     if (a == null) return -1;
     if (D && a.lastIndexOf === D) return a.lastIndexOf(b);
-    for (var d = a.length; d--; ) if (d in a && a[d] === b) return d;
+    for (let d = a.length; d--; ) if (d in a && a[d] === b) return d;
     return -1;
   };
   b.range = function (a, b, d) {
@@ -380,26 +391,27 @@
         g = Array(e);
       f < e;
 
-    )
+    ) {
       (g[f++] = a), (a += d);
+    }
     return g;
   };
-  var F = function () {};
+  const F = function () {};
   b.bind = function (a, c) {
-    var d, e;
+    let d, e;
     if (a.bind === s && s) return s.apply(a, i.call(arguments, 1));
     if (!b.isFunction(a)) throw new TypeError();
     e = i.call(arguments, 2);
     return (d = function () {
       if (!(this instanceof d)) return a.apply(c, e.concat(i.call(arguments)));
       F.prototype = a.prototype;
-      var b = new F(),
-        g = a.apply(b, e.concat(i.call(arguments)));
+      const b = new F();
+      const g = a.apply(b, e.concat(i.call(arguments)));
       return Object(g) === g ? g : b;
     });
   };
   b.bindAll = function (a) {
-    var c = i.call(arguments, 1);
+    let c = i.call(arguments, 1);
     c.length == 0 && (c = b.functions(a));
     j(c, function (c) {
       a[c] = b.bind(a[c], a);
@@ -407,15 +419,15 @@
     return a;
   };
   b.memoize = function (a, c) {
-    var d = {};
+    const d = {};
     c || (c = b.identity);
     return function () {
-      var e = c.apply(this, arguments);
+      const e = c.apply(this, arguments);
       return b.has(d, e) ? d[e] : (d[e] = a.apply(this, arguments));
     };
   };
   b.delay = function (a, b) {
-    var d = i.call(arguments, 2);
+    const d = i.call(arguments, 2);
     return setTimeout(function () {
       return a.apply(a, d);
     }, b);
@@ -424,18 +436,18 @@
     return b.delay.apply(b, [a, 1].concat(i.call(arguments, 1)));
   };
   b.throttle = function (a, c) {
-    var d,
-      e,
-      f,
-      g,
-      h,
-      i = b.debounce(function () {
-        h = g = false;
-      }, c);
+    let d;
+    let e;
+    let f;
+    let g;
+    let h;
+    const i = b.debounce(function () {
+      h = g = false;
+    }, c);
     return function () {
       d = this;
       e = arguments;
-      var b;
+      let b;
       f ||
         (f = setTimeout(function () {
           f = null;
@@ -448,10 +460,10 @@
     };
   };
   b.debounce = function (a, b) {
-    var d;
+    let d;
     return function () {
-      var e = this,
-        f = arguments;
+      const e = this;
+      const f = arguments;
       clearTimeout(d);
       d = setTimeout(function () {
         d = null;
@@ -460,8 +472,8 @@
     };
   };
   b.once = function (a) {
-    var b = false,
-      d;
+    let b = false;
+    let d;
     return function () {
       if (b) return d;
       b = true;
@@ -470,15 +482,16 @@
   };
   b.wrap = function (a, b) {
     return function () {
-      var d = [a].concat(i.call(arguments, 0));
+      const d = [a].concat(i.call(arguments, 0));
       return b.apply(this, d);
     };
   };
   b.compose = function () {
-    var a = arguments;
+    const a = arguments;
     return function () {
-      for (var b = arguments, d = a.length - 1; d >= 0; d--)
+      for (var b = arguments, d = a.length - 1; d >= 0; d--) {
         b = [a[d].apply(this, b)];
+      }
       return b[0];
     };
   };
@@ -493,8 +506,8 @@
     J ||
     function (a) {
       if (a !== Object(a)) throw new TypeError("Invalid object");
-      var c = [],
-        d;
+      const c = [];
+      let d;
       for (d in a) b.has(a, d) && (c[c.length] = d);
       return c;
     };
@@ -502,20 +515,20 @@
     return b.map(a, b.identity);
   };
   b.functions = b.methods = function (a) {
-    var c = [],
-      d;
+    const c = [];
+    let d;
     for (d in a) b.isFunction(a[d]) && c.push(d);
     return c.sort();
   };
   b.extend = function (a) {
     j(i.call(arguments, 1), function (b) {
-      for (var d in b) a[d] = b[d];
+      for (const d in b) a[d] = b[d];
     });
     return a;
   };
   b.defaults = function (a) {
     j(i.call(arguments, 1), function (b) {
-      for (var d in b) a[d] == null && (a[d] = b[d]);
+      for (const d in b) a[d] == null && (a[d] = b[d]);
     });
     return a;
   };
@@ -531,7 +544,7 @@
   };
   b.isEmpty = function (a) {
     if (b.isArray(a) || b.isString(a)) return a.length === 0;
-    for (var c in a) if (b.has(a, c)) return false;
+    for (const c in a) if (b.has(a, c)) return false;
     return true;
   };
   b.isElement = function (a) {
@@ -548,10 +561,11 @@
   b.isArguments = function (a) {
     return l.call(a) == "[object Arguments]";
   };
-  if (!b.isArguments(arguments))
+  if (!b.isArguments(arguments)) {
     b.isArguments = function (a) {
       return !(!a || !b.has(a, "callee"));
     };
+  }
   b.isFunction = function (a) {
     return l.call(a) == "[object Function]";
   };
@@ -590,7 +604,7 @@
     return a;
   };
   b.times = function (a, b, d) {
-    for (var e = 0; e < a; e++) b.call(d, e);
+    for (let e = 0; e < a; e++) b.call(d, e);
   };
   b.escape = function (a) {
     return ("" + a)
@@ -606,9 +620,9 @@
       K(c, (b[c] = a[c]));
     });
   };
-  var L = 0;
+  let L = 0;
   b.uniqueId = function (a) {
-    var b = L++;
+    const b = L++;
     return a ? a + b : b;
   };
   b.templateSettings = {
@@ -616,31 +630,31 @@
     interpolate: /<%=([\s\S]+?)%>/g,
     escape: /<%-([\s\S]+?)%>/g,
   };
-  var t = /.^/,
-    u = function (a) {
-      return a.replace(/\\\\/g, "\\").replace(/\\'/g, "'");
-    };
+  const t = /.^/;
+  const u = function (a) {
+    return a.replace(/\\\\/g, "\\").replace(/\\'/g, "'");
+  };
   b.template = function (a, c) {
-    var d = b.templateSettings,
-      d =
-        "var __p=[],print=function(){__p.push.apply(__p,arguments);};with(obj||{}){__p.push('" +
-        a
-          .replace(/\\/g, "\\\\")
-          .replace(/'/g, "\\'")
-          .replace(d.escape || t, function (a, b) {
-            return "',_.escape(" + u(b) + "),'";
-          })
-          .replace(d.interpolate || t, function (a, b) {
-            return "'," + u(b) + ",'";
-          })
-          .replace(d.evaluate || t, function (a, b) {
-            return "');" + u(b).replace(/[\r\n\t]/g, " ") + ";__p.push('";
-          })
-          .replace(/\r/g, "\\r")
-          .replace(/\n/g, "\\n")
-          .replace(/\t/g, "\\t") +
-        "');}return __p.join('');",
-      e = new Function("obj", "_", d);
+    var d = b.templateSettings;
+    var d =
+      "var __p=[],print=function(){__p.push.apply(__p,arguments);};with(obj||{}){__p.push('" +
+      a
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'")
+        .replace(d.escape || t, function (a, b) {
+          return "',_.escape(" + u(b) + "),'";
+        })
+        .replace(d.interpolate || t, function (a, b) {
+          return "'," + u(b) + ",'";
+        })
+        .replace(d.evaluate || t, function (a, b) {
+          return "');" + u(b).replace(/[\r\n\t]/g, " ") + ";__p.push('";
+        })
+        .replace(/\r/g, "\\r")
+        .replace(/\n/g, "\\n")
+        .replace(/\t/g, "\\t") +
+      "');}return __p.join('');";
+    const e = new Function("obj", "_", d);
     return c
       ? e(c, b)
       : function (a) {
@@ -654,29 +668,29 @@
     this._wrapped = a;
   };
   b.prototype = m.prototype;
-  var v = function (a, c) {
-      return c ? b(a).chain() : a;
-    },
-    K = function (a, c) {
-      m.prototype[a] = function () {
-        var a = i.call(arguments);
-        H.call(a, this._wrapped);
-        return v(c.apply(b, a), this._chain);
-      };
+  const v = function (a, c) {
+    return c ? b(a).chain() : a;
+  };
+  var K = function (a, c) {
+    m.prototype[a] = function () {
+      const a = i.call(arguments);
+      H.call(a, this._wrapped);
+      return v(c.apply(b, a), this._chain);
     };
+  };
   b.mixin(b);
   j("pop,push,reverse,shift,sort,splice,unshift".split(","), function (a) {
-    var b = k[a];
+    const b = k[a];
     m.prototype[a] = function () {
-      var d = this._wrapped;
+      const d = this._wrapped;
       b.apply(d, arguments);
-      var e = d.length;
+      const e = d.length;
       (a == "shift" || a == "splice") && e === 0 && delete d[0];
       return v(d, this._chain);
     };
   });
   j(["concat", "join", "slice"], function (a) {
-    var b = k[a];
+    const b = k[a];
     m.prototype[a] = function () {
       return v(b.apply(this._wrapped, arguments), this._chain);
     };
