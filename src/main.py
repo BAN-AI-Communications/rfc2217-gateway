@@ -2,13 +2,13 @@
 import logging
 import signal
 
-import config
 import pyudev
+
+import config
 from usb_devices_handler import UsbDevicesHandler
 
 logging.basicConfig(
-    format=
-    "%(asctime)s,%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s",
+    format="%(asctime)s,%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s",
     level=logging.DEBUG,
 )
 logger = logging.getLogger(__name__)

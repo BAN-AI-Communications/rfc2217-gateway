@@ -10,7 +10,7 @@
  *
  */
 
-var stopwords = [
+const stopwords = [
   "a",
   "and",
   "are",
@@ -50,8 +50,8 @@ var stopwords = [
 /**
  * Porter Stemmer
  */
-var Stemmer = function () {
-  var step2list = {
+const Stemmer = function () {
+  const step2list = {
     ational: "ate",
     tional: "tion",
     enci: "ence",
@@ -75,7 +75,7 @@ var Stemmer = function () {
     logi: "log",
   };
 
-  var step3list = {
+  const step3list = {
     icate: "ic",
     ative: "",
     alize: "al",
@@ -85,28 +85,28 @@ var Stemmer = function () {
     ness: "",
   };
 
-  var c = "[^aeiou]"; // consonant
-  var v = "[aeiouy]"; // vowel
-  var C = c + "[^aeiouy]*"; // consonant sequence
-  var V = v + "[aeiou]*"; // vowel sequence
+  const c = "[^aeiou]"; // consonant
+  const v = "[aeiouy]"; // vowel
+  const C = c + "[^aeiouy]*"; // consonant sequence
+  const V = v + "[aeiou]*"; // vowel sequence
 
-  var mgr0 = "^(" + C + ")?" + V + C; // [C]VC... is m>0
-  var meq1 = "^(" + C + ")?" + V + C + "(" + V + ")?$"; // [C]VC[V] is m=1
-  var mgr1 = "^(" + C + ")?" + V + C + V + C; // [C]VCVC... is m>1
-  var s_v = "^(" + C + ")?" + v; // vowel in stem
+  const mgr0 = "^(" + C + ")?" + V + C; // [C]VC... is m>0
+  const meq1 = "^(" + C + ")?" + V + C + "(" + V + ")?$"; // [C]VC[V] is m=1
+  const mgr1 = "^(" + C + ")?" + V + C + V + C; // [C]VCVC... is m>1
+  const s_v = "^(" + C + ")?" + v; // vowel in stem
 
   this.stemWord = function (w) {
-    var stem;
-    var suffix;
-    var firstch;
-    var origword = w;
+    let stem;
+    let suffix;
+    let firstch;
+    const origword = w;
 
     if (w.length < 3) return w;
 
-    var re;
-    var re2;
-    var re3;
-    var re4;
+    let re;
+    let re2;
+    let re3;
+    let re4;
 
     firstch = w.substr(0, 1);
     if (firstch == "y") w = firstch.toUpperCase() + w.substr(1);
@@ -214,9 +214,9 @@ var Stemmer = function () {
   };
 };
 
-var splitChars = (function () {
-  var result = {};
-  var singles = [
+const splitChars = (function () {
+  const result = {};
+  const singles = [
     96, 180, 187, 191, 215, 247, 749, 885, 903, 907, 909, 930, 1014, 1648, 1748,
     1809, 2416, 2473, 2481, 2526, 2601, 2609, 2612, 2615, 2653, 2702, 2706,
     2729, 2737, 2740, 2857, 2865, 2868, 2910, 2928, 2948, 2961, 2971, 2973,
@@ -228,11 +228,11 @@ var splitChars = (function () {
     11711, 11719, 11727, 11735, 12448, 12539, 43010, 43014, 43019, 43587, 43696,
     43713, 64286, 64297, 64311, 64317, 64319, 64322, 64325, 65141,
   ];
-  var i, j, start, end;
+  let i, j, start, end;
   for (i = 0; i < singles.length; i++) {
     result[singles[i]] = true;
   }
-  var ranges = [
+  const ranges = [
     [0, 47],
     [58, 64],
     [91, 94],
@@ -522,9 +522,9 @@ var splitChars = (function () {
 })();
 
 function splitQuery(query) {
-  var result = [];
-  var start = -1;
-  for (var i = 0; i < query.length; i++) {
+  const result = [];
+  let start = -1;
+  for (let i = 0; i < query.length; i++) {
     if (splitChars[query.charCodeAt(i)]) {
       if (start !== -1) {
         result.push(query.slice(start, i));

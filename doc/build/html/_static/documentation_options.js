@@ -1,4 +1,4 @@
-var DOCUMENTATION_OPTIONS = {
+const DOCUMENTATION_OPTIONS = {
   URL_ROOT: document
     .getElementById("documentation_options")
     .getAttribute("data-url_root"),

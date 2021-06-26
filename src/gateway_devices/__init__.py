@@ -6,8 +6,7 @@ providing a dictionary of module classes."""
 import importlib
 import logging
 import os
-from typing import Any
-from typing import Dict
+from typing import Any, Dict
 
 logger = logging.getLogger("gateway_devices")
 

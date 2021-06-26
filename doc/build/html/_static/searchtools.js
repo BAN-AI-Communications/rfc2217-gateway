@@ -61,8 +61,9 @@ var Search = {
   _pulse_status: -1,
 
   htmlToText: function (htmlString) {
-    var virtualDocument = document.implementation.createHTMLDocument("virtual");
-    var htmlElement = $(htmlString, virtualDocument);
+    const virtualDocument =
+      document.implementation.createHTMLDocument("virtual");
+    const htmlElement = $(htmlString, virtualDocument);
     htmlElement.find(".headerlink").remove();
     docContent = htmlElement.find("[role=main]")[0];
     if (docContent === undefined) {
@@ -76,9 +77,9 @@ var Search = {
   },
 
   init: function () {
-    var params = $.getQueryParameters();
+    const params = $.getQueryParameters();
     if (params.q) {
-      var query = params.q[0];
+      const query = params.q[0];
       $('input[name="q"]')[0].value = query;
       this.performSearch(query);
     }
@@ -100,7 +101,7 @@ var Search = {
   },
 
   setIndex: function (index) {
-    var q;
+    let q;
     this._index = index;
     if ((q = this._queued_query) !== null) {
       this._queued_query = null;
@@ -123,9 +124,9 @@ var Search = {
   startPulse: function () {
     if (this._pulse_status >= 0) return;
     function pulse() {
-      var i;
+      let i;
       Search._pulse_status = (Search._pulse_status + 1) % 4;
-      var dotString = "";
+      let dotString = "";
       for (i = 0; i < Search._pulse_status; i++) dotString += ".";
       Search.dots.text(dotString);
       if (Search._pulse_status > -1) window.setTimeout(pulse, 500);
@@ -156,15 +157,15 @@ var Search = {
    * execute search (requires search index to be loaded)
    */
   query: function (query) {
-    var i;
+    let i;
 
     // stem the searchterms and add them to the correct list
-    var stemmer = new Stemmer();
-    var searchterms = [];
-    var excluded = [];
-    var hlterms = [];
-    var tmp = splitQuery(query);
-    var objectterms = [];
+    const stemmer = new Stemmer();
+    const searchterms = [];
+    const excluded = [];
+    const hlterms = [];
+    const tmp = splitQuery(query);
+    const objectterms = [];
     for (i = 0; i < tmp.length; i++) {
       if (tmp[i] !== "") {
         objectterms.push(tmp[i].toLowerCase());
@@ -175,7 +176,7 @@ var Search = {
         continue;
       }
       // stem the word
-      var word = stemmer.stemWord(tmp[i].toLowerCase());
+      let word = stemmer.stemWord(tmp[i].toLowerCase());
       // prevent stemmer from cutting word smaller than two chars
       if (word.length < 3 && tmp[i].length >= 3) {
         word = tmp[i];
@@ -192,23 +193,23 @@ var Search = {
       // only add if not already in the list
       if (!$u.contains(toAppend, word)) toAppend.push(word);
     }
-    var highlightstring = "?highlight=" + $.urlencode(hlterms.join(" "));
+    const highlightstring = "?highlight=" + $.urlencode(hlterms.join(" "));
 
     // console.debug('SEARCH: searching for:');
     // console.info('required: ', searchterms);
     // console.info('excluded: ', excluded);
 
     // prepare search
-    var terms = this._index.terms;
-    var titleterms = this._index.titleterms;
+    const terms = this._index.terms;
+    const titleterms = this._index.titleterms;
 
     // array of [filename, title, anchor, descr, score]
-    var results = [];
+    let results = [];
     $("#search-progress").empty();
 
     // lookup as object
     for (i = 0; i < objectterms.length; i++) {
-      var others = [].concat(
+      const others = [].concat(
         objectterms.slice(0, i),
         objectterms.slice(i + 1, objectterms.length)
       );
@@ -224,16 +225,17 @@ var Search = {
 
     // let the scorer override scores with a custom scoring function
     if (Scorer.score) {
-      for (i = 0; i < results.length; i++)
+      for (i = 0; i < results.length; i++) {
         results[i][4] = Scorer.score(results[i]);
+      }
     }
 
     // now sort the results by score (in opposite order of appearance, since the
     // display function below uses pop() to retrieve items) and then
     // alphabetically
     results.sort(function (a, b) {
-      var left = a[4];
-      var right = b[4];
+      let left = a[4];
+      let right = b[4];
       if (left > right) {
         return 1;
       } else if (left < right) {
@@ -251,17 +253,17 @@ var Search = {
     // console.info('search results:', Search.lastresults);
 
     // print the results
-    var resultCount = results.length;
+    const resultCount = results.length;
     function displayNextItem() {
       // results left, load the summary and display it
       if (results.length) {
-        var item = results.pop();
-        var listItem = $('<li style="display:none"></li>');
-        var requestUrl = "";
-        var linkUrl = "";
+        const item = results.pop();
+        const listItem = $('<li style="display:none"></li>');
+        let requestUrl = "";
+        let linkUrl = "";
         if (DOCUMENTATION_OPTIONS.BUILDER === "dirhtml") {
           // dirhtml builder
-          var dirname = item[0] + "/";
+          let dirname = item[0] + "/";
           if (dirname.match(/\/index\/$/)) {
             dirname = dirname.substring(0, dirname.length - 6);
           } else if (dirname == "index/") {
@@ -293,7 +295,7 @@ var Search = {
             url: requestUrl,
             dataType: "text",
             complete: function (jqxhr, textstatus) {
-              var data = jqxhr.responseText;
+              const data = jqxhr.responseText;
               if (data !== "" && data !== undefined) {
                 listItem.append(
                   Search.makeSearchSummary(data, searchterms, hlterms)
@@ -317,18 +319,19 @@ var Search = {
       else {
         Search.stopPulse();
         Search.title.text(_("Search Results"));
-        if (!resultCount)
+        if (!resultCount) {
           Search.status.text(
             _(
               "Your search did not match any documents. Please make sure that all words are spelled correctly and that you've selected enough categories."
             )
           );
-        else
+        } else {
           Search.status.text(
             _(
               "Search finished, found %s page(s) matching the search query."
             ).replace("%s", resultCount)
           );
+        }
         Search.status.fadeIn(500);
       }
     }
@@ -339,22 +342,22 @@ var Search = {
    * search for object names
    */
   performObjectSearch: function (object, otherterms) {
-    var filenames = this._index.filenames;
-    var docnames = this._index.docnames;
-    var objects = this._index.objects;
-    var objnames = this._index.objnames;
-    var titles = this._index.titles;
+    const filenames = this._index.filenames;
+    const docnames = this._index.docnames;
+    const objects = this._index.objects;
+    const objnames = this._index.objnames;
+    const titles = this._index.titles;
 
-    var i;
-    var results = [];
+    let i;
+    const results = [];
 
-    for (var prefix in objects) {
-      for (var name in objects[prefix]) {
-        var fullname = (prefix ? prefix + "." : "") + name;
-        var fullnameLower = fullname.toLowerCase();
+    for (const prefix in objects) {
+      for (const name in objects[prefix]) {
+        const fullname = (prefix ? prefix + "." : "") + name;
+        const fullnameLower = fullname.toLowerCase();
         if (fullnameLower.indexOf(object) > -1) {
-          var score = 0;
-          var parts = fullnameLower.split(".");
+          let score = 0;
+          const parts = fullnameLower.split(".");
           // check for different match types: exact matches of full name or
           // "last name" (i.e. last dotted part)
           if (fullnameLower == object || parts[parts.length - 1] == object) {
@@ -363,13 +366,13 @@ var Search = {
           } else if (parts[parts.length - 1].indexOf(object) > -1) {
             score += Scorer.objPartialMatch;
           }
-          var match = objects[prefix][name];
-          var objname = objnames[match[1]][2];
-          var title = titles[match[0]];
+          const match = objects[prefix][name];
+          const objname = objnames[match[1]][2];
+          const title = titles[match[0]];
           // If more than one term searched for, we require other words to be
           // found in the name/title/description
           if (otherterms.length > 0) {
-            var haystack = (
+            const haystack = (
               prefix +
               " " +
               name +
@@ -378,7 +381,7 @@ var Search = {
               " " +
               title
             ).toLowerCase();
-            var allfound = true;
+            let allfound = true;
             for (i = 0; i < otherterms.length; i++) {
               if (haystack.indexOf(otherterms[i]) == -1) {
                 allfound = false;
@@ -389,12 +392,13 @@ var Search = {
               continue;
             }
           }
-          var descr = objname + _(", in ") + title;
+          const descr = objname + _(", in ") + title;
 
-          var anchor = match[3];
+          let anchor = match[3];
           if (anchor === "") anchor = fullname;
-          else if (anchor == "-")
+          else if (anchor == "-") {
             anchor = objnames[match[1]][1] + "-" + fullname;
+          }
           // add custom score for some objects according to scorer
           if (Scorer.objPrio.hasOwnProperty(match[2])) {
             score += Scorer.objPrio[match[2]];
@@ -420,20 +424,20 @@ var Search = {
    * search for full-text terms in the index
    */
   performTermsSearch: function (searchterms, excluded, terms, titleterms) {
-    var docnames = this._index.docnames;
-    var filenames = this._index.filenames;
-    var titles = this._index.titles;
+    const docnames = this._index.docnames;
+    const filenames = this._index.filenames;
+    const titles = this._index.titles;
 
-    var i, j, file;
-    var fileMap = {};
-    var scoreMap = {};
-    var results = [];
+    let i, j, file;
+    const fileMap = {};
+    const scoreMap = {};
+    const results = [];
 
     // perform the search on the required terms
     for (i = 0; i < searchterms.length; i++) {
       var word = searchterms[i];
       var files = [];
-      var _o = [
+      const _o = [
         { files: terms[word], score: Scorer.term },
         { files: titleterms[word], score: Scorer.title },
       ];
@@ -461,7 +465,7 @@ var Search = {
       }
       // found search word in contents
       $u.each(_o, function (o) {
-        var _files = o.files;
+        let _files = o.files;
         if (_files === undefined) return;
 
         if (_files.length === undefined) _files = [_files];
@@ -478,18 +482,18 @@ var Search = {
       // create the mapping
       for (j = 0; j < files.length; j++) {
         file = files[j];
-        if (file in fileMap && fileMap[file].indexOf(word) === -1)
+        if (file in fileMap && fileMap[file].indexOf(word) === -1) {
           fileMap[file].push(word);
-        else fileMap[file] = [word];
+        } else fileMap[file] = [word];
       }
     }
 
     // now check if the files don't contain excluded terms
     for (file in fileMap) {
-      var valid = true;
+      let valid = true;
 
       // check if all requirements are matched
-      var filteredTermCount = // as search terms with length < 3 are discarded:
+      const filteredTermCount = // as search terms with length < 3 are discarded:
         // ignore
         searchterms.filter(function (term) {
           return term.length > 2;
@@ -497,8 +501,9 @@ var Search = {
       if (
         fileMap[file].length != searchterms.length &&
         fileMap[file].length != filteredTermCount
-      )
+      ) {
         continue;
+      }
 
       // ensure that none of the excluded terms is in the search result
       for (i = 0; i < excluded.length; i++) {
@@ -518,7 +523,7 @@ var Search = {
         // select one (max) score for the file.
         // for better ranking, we should calculate ranking by using words
         // statistics like basic tf-idf...
-        var score = $u.max(
+        const score = $u.max(
           $u.map(fileMap[file], function (w) {
             return scoreMap[file][w];
           })
@@ -544,19 +549,19 @@ var Search = {
    * latter for highlighting it.
    */
   makeSearchSummary: function (htmlText, keywords, hlwords) {
-    var text = Search.htmlToText(htmlText);
-    var textLower = text.toLowerCase();
-    var start = 0;
+    const text = Search.htmlToText(htmlText);
+    const textLower = text.toLowerCase();
+    let start = 0;
     $.each(keywords, function () {
-      var i = textLower.indexOf(this.toLowerCase());
+      const i = textLower.indexOf(this.toLowerCase());
       if (i > -1) start = i;
     });
     start = Math.max(start - 120, 0);
-    var excerpt =
+    const excerpt =
       (start > 0 ? "..." : "") +
       $.trim(text.substr(start, 240)) +
       (start + 240 - text.length ? "..." : "");
-    var rv = $('<div class="context"></div>').text(excerpt);
+    let rv = $('<div class="context"></div>').text(excerpt);
     $.each(hlwords, function () {
       rv = rv.highlightText(this, "highlighted");
     });

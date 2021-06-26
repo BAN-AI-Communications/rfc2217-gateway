@@ -46,12 +46,12 @@ jQuery.urlencode = encodeURIComponent;
  */
 jQuery.getQueryParameters = function (s) {
   if (typeof s === "undefined") s = document.location.search;
-  var parts = s.substr(s.indexOf("?") + 1).split("&");
-  var result = {};
-  for (var i = 0; i < parts.length; i++) {
-    var tmp = parts[i].split("=", 2);
-    var key = jQuery.urldecode(tmp[0]);
-    var value = jQuery.urldecode(tmp[1]);
+  const parts = s.substr(s.indexOf("?") + 1).split("&");
+  const result = {};
+  for (let i = 0; i < parts.length; i++) {
+    const tmp = parts[i].split("=", 2);
+    const key = jQuery.urldecode(tmp[0]);
+    const value = jQuery.urldecode(tmp[1]);
     if (key in result) result[key].push(value);
     else result[key] = [value];
   }
@@ -65,15 +65,15 @@ jQuery.getQueryParameters = function (s) {
 jQuery.fn.highlightText = function (text, className) {
   function highlight(node, addItems) {
     if (node.nodeType === 3) {
-      var val = node.nodeValue;
-      var pos = val.toLowerCase().indexOf(text);
+      const val = node.nodeValue;
+      const pos = val.toLowerCase().indexOf(text);
       if (
         pos >= 0 &&
         !jQuery(node.parentNode).hasClass(className) &&
         !jQuery(node.parentNode).hasClass("nohighlight")
       ) {
-        var span;
-        var isInSVG = jQuery(node)
+        let span;
+        const isInSVG = jQuery(node)
           .closest("body, svg, foreignObject")
           .is("svg");
         if (isInSVG) {
@@ -95,11 +95,11 @@ jQuery.fn.highlightText = function (text, className) {
         );
         node.nodeValue = val.substr(0, pos);
         if (isInSVG) {
-          var rect = document.createElementNS(
+          const rect = document.createElementNS(
             "http://www.w3.org/2000/svg",
             "rect"
           );
-          var bbox = node.parentElement.getBBox();
+          const bbox = node.parentElement.getBBox();
           rect.x.baseVal.value = bbox.x;
           rect.y.baseVal.value = bbox.y;
           rect.width.baseVal.value = bbox.width;
@@ -114,11 +114,11 @@ jQuery.fn.highlightText = function (text, className) {
       });
     }
   }
-  var addItems = [];
-  var result = this.each(function () {
+  const addItems = [];
+  const result = this.each(function () {
     highlight(this, addItems);
   });
-  for (var i = 0; i < addItems.length; ++i) {
+  for (let i = 0; i < addItems.length; ++i) {
     jQuery(addItems[i].parent).before(addItems[i].target);
   }
   return result;
@@ -132,7 +132,7 @@ if (!jQuery.browser) {
   jQuery.uaMatch = function (ua) {
     ua = ua.toLowerCase();
 
-    var match =
+    const match =
       /(chrome)[ \/]([\w.]+)/.exec(ua) ||
       /(webkit)[ \/]([\w.]+)/.exec(ua) ||
       /(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua) ||
@@ -172,20 +172,21 @@ var Documentation = {
   // gettext and ngettext don't access this so that the functions
   // can safely bound to a different name (_ = Documentation.gettext)
   gettext: function (string) {
-    var translated = Documentation.TRANSLATIONS[string];
+    const translated = Documentation.TRANSLATIONS[string];
     if (typeof translated === "undefined") return string;
     return typeof translated === "string" ? translated : translated[0];
   },
 
   ngettext: function (singular, plural, n) {
-    var translated = Documentation.TRANSLATIONS[singular];
+    const translated = Documentation.TRANSLATIONS[singular];
     if (typeof translated === "undefined") return n == 1 ? singular : plural;
     return translated[Documentation.PLURALEXPR(n)];
   },
 
   addTranslations: function (catalog) {
-    for (var key in catalog.messages)
+    for (const key in catalog.messages) {
       this.TRANSLATIONS[key] = catalog.messages[key];
+    }
     this.PLURAL_EXPR = new Function(
       "n",
       "return +(" + catalog.plural_expr + ")"
@@ -216,20 +217,21 @@ var Documentation = {
    * see: https://bugzilla.mozilla.org/show_bug.cgi?id=645075
    */
   fixFirefoxAnchorBug: function () {
-    if (document.location.hash && $.browser.mozilla)
+    if (document.location.hash && $.browser.mozilla) {
       window.setTimeout(function () {
         document.location.href += "";
       }, 10);
+    }
   },
 
   /**
    * highlight the search words provided in the url in the text
    */
   highlightSearchWords: function () {
-    var params = $.getQueryParameters();
-    var terms = params.highlight ? params.highlight[0].split(/\s+/) : [];
+    const params = $.getQueryParameters();
+    const terms = params.highlight ? params.highlight[0].split(/\s+/) : [];
     if (terms.length) {
-      var body = $("div.body");
+      let body = $("div.body");
       if (!body.length) {
         body = $("body");
       }
@@ -251,14 +253,14 @@ var Documentation = {
    * init the domain index toggle buttons
    */
   initIndexTable: function () {
-    var togglers = $("img.toggler")
+    const togglers = $("img.toggler")
       .click(function () {
-        var src = $(this).attr("src");
-        var idnum = $(this).attr("id").substr(7);
+        const src = $(this).attr("src");
+        const idnum = $(this).attr("id").substr(7);
         $("tr.cg-" + idnum).toggle();
-        if (src.substr(-9) === "minus.png")
+        if (src.substr(-9) === "minus.png") {
           $(this).attr("src", src.substr(0, src.length - 9) + "plus.png");
-        else $(this).attr("src", src.substr(0, src.length - 8) + "minus.png");
+        } else $(this).attr("src", src.substr(0, src.length - 8) + "minus.png");
       })
       .css("display", "");
     if (DOCUMENTATION_OPTIONS.COLLAPSE_INDEX) {
@@ -285,18 +287,18 @@ var Documentation = {
    * get the current relative url
    */
   getCurrentURL: function () {
-    var path = document.location.pathname;
-    var parts = path.split(/\//);
+    const path = document.location.pathname;
+    const parts = path.split(/\//);
     $.each(DOCUMENTATION_OPTIONS.URL_ROOT.split(/\//), function () {
       if (this === "..") parts.pop();
     });
-    var url = parts.join("/");
+    const url = parts.join("/");
     return path.substring(url.lastIndexOf("/") + 1, path.length - 1);
   },
 
   initOnKeyListeners: function () {
     $(document).keydown(function (event) {
-      var activeElementType = document.activeElement.tagName;
+      const activeElementType = document.activeElement.tagName;
       // don't navigate when in search box, textarea, dropdown or button
       if (
         activeElementType !== "TEXTAREA" &&
