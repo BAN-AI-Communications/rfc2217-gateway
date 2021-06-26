@@ -22,13 +22,14 @@ for file_name in os.listdir(folder):
     if os.path.isfile(FILE_PATH):
         if file_name in EXCLUDED_FILE_NAMES:
             continue
-        file_base = file_name.replace('.py', '')
+        file_base = file_name.replace(".py", "")
         MODULE_PATH = "{}.{}".format(__name__, file_base)
         try:
             module = importlib.import_module(MODULE_PATH)
         except Exception as broad_except:  # pylint: disable=broad-except
-            logger.error("Error loading device definition at %s: \n%s",
-                         MODULE_PATH, broad_except)
+            logger.error(
+                "Error loading device definition at %s: \n%s", MODULE_PATH, broad_except
+            )
         else:
             module_class = module.get_class()  # type: ignore
             module_device_identifier = module_class.get_device_identifier()

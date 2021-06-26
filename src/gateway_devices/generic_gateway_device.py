@@ -8,7 +8,7 @@ from typing import List
 logger = logging.getLogger(__name__)
 
 
-class GenericGatewayDevice():
+class GenericGatewayDevice:
 
     NAME = ""
     ID_MODEL_ID = ""
@@ -36,8 +36,7 @@ class GenericGatewayDevice():
 
         self.device = device
         if self.PORT_RANGE:
-            if (len(self.PORT_RANGE) != 2
-                    or self.PORT_RANGE[0] > self.PORT_RANGE[1]):
+            if len(self.PORT_RANGE) != 2 or self.PORT_RANGE[0] > self.PORT_RANGE[1]:
                 raise Exception("USB device has invalid PORT_RANGE")
             with self._lock:
                 if not self._isPortRangeInit:
@@ -46,8 +45,7 @@ class GenericGatewayDevice():
                         self._availablePorts.append(i)
 
                     if not self._availablePorts:
-                        raise Exception(
-                            "USB device has no more available Ports")
+                        raise Exception("USB device has no more available Ports")
 
                 self._selectedPort = self._availablePorts.pop()
         else:
@@ -67,7 +65,7 @@ class GenericGatewayDevice():
         if not cls.ID_MODEL_ID or not cls.ID_VENDOR_ID or not cls.ID_VENDOR_ENC:
             raise Exception("Undefined required parameters")
         identifier_string = cls.ID_MODEL_ID + cls.ID_VENDOR_ID + cls.ID_VENDOR_ENC
-        return hashlib.sha224(identifier_string.encode('utf-8')).hexdigest()
+        return hashlib.sha224(identifier_string.encode("utf-8")).hexdigest()
 
     def get_name(self):
         return self.NAME
@@ -100,11 +98,13 @@ class GenericGatewayDevice():
         if self.PORT_RANGE:
             return "RFC2217 ({}:{}:{})".format(
                 self.gateway_device.get_id_vendor(),
-                self.gateway_device.get_id_model(), self.get_serial_short())
+                self.gateway_device.get_id_model(),
+                self.get_serial_short(),
+            )
         else:
             return "RFC2217 ({}:{})".format(
-                self.gateway_device.get_id_vendor(),
-                self.gateway_device.get_id_model())
+                self.gateway_device.get_id_vendor(), self.gateway_device.get_id_model()
+            )
 
     def get_properties(self):
         model_id = self.device.get("ID_MODEL_ID", "")
@@ -128,7 +128,7 @@ class GenericGatewayDevice():
             "VENDOR_ENC": vendor_enc,
             "VENDOR_DB": vendor_db,
             "SERIAL": serial,
-            "SERIAL_SHORT": serial_short
+            "SERIAL_SHORT": serial_short,
         }
 
         return properties
