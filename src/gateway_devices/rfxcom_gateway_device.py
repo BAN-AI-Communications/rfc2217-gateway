@@ -2,6 +2,7 @@
 
 import logging
 from typing import Type
+
 from gateway_devices.generic_gateway_device import GenericGatewayDevice
 
 logger = logging.getLogger(__name__)
