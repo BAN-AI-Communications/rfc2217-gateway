@@ -36,7 +36,8 @@ class SaradGatewayDevice(GenericGatewayDevice):
         if len(self.__devi) == 1:
             return "{}:{}".format(self.device.get("ID_MODEL", ""),
                                   self.__devi[0].get_id())
-        return self.device.get("ID_SERIAL", "")
+        else:
+            return self.device.get("ID_SERIAL", "")
 
     def get_properties(self):
         if len(self.__devi) == 1:
