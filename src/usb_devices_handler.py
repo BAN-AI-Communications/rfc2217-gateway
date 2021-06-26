@@ -97,8 +97,8 @@ class UsbDevice:
             self.network_interface,
         )
         self.rfc2217_connection = RFC2217Device(
-            self.gateway_device.get_serial_port(), self.gateway_device.get_tcp_port()
-        )
+            self.gateway_device.get_serial_port(),
+            self.gateway_device.get_tcp_port())
         self.rfc2217_connection.start()
         self.mdns_advertiser.start()
 

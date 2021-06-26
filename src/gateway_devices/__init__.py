@@ -27,9 +27,8 @@ for file_name in os.listdir(folder):
         try:
             module = importlib.import_module(MODULE_PATH)
         except Exception as broad_except:  # pylint: disable=broad-except
-            logger.error(
-                "Error loading device definition at %s: \n%s", MODULE_PATH, broad_except
-            )
+            logger.error("Error loading device definition at %s: \n%s",
+                         MODULE_PATH, broad_except)
         else:
             module_class = module.get_class()  # type: ignore
             module_device_identifier = module_class.get_device_identifier()
