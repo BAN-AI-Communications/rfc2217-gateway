@@ -4,10 +4,10 @@ Every module defines a class of devices that will be published.
 device_classes is a variable in the namespace of this package
 providing a dictionary of module classes."""
 
-import logging
 import importlib
+import logging
 import os
-from typing import Dict, Any
+from typing import Any, Dict
 
 logger = logging.getLogger("gateway_devices")
 

@@ -2,10 +2,10 @@
 
 import logging
 import socket
-import time
 import threading
-import netifaces as ni
+import time
 
+import netifaces as ni
 from zeroconf import ServiceInfo, Zeroconf
 
 logger = logging.getLogger(__name__)
