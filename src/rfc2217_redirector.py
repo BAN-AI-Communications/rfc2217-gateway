@@ -6,7 +6,6 @@
 # (C) 2009-2015 Chris Liechti <cliechti@gmx.net>
 #
 # SPDX-License-Identifier:    BSD-3-Clause
-
 import logging
 import socket
 import threading
