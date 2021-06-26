@@ -14,7 +14,7 @@ The program has the following features:
 
 ## Author
 
-Copyright (C) 2020 [Aitor Iturrioz](https://github.com/bodiroga)
+Copyright (C) 2021 [Aitor Iturrioz](https://github.com/bodiroga)
 
 ## License
 
