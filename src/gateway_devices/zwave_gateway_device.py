@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-
 import logging
 import threading
 import time
 from typing import Type
 
 import serial
-
 from gateway_devices.generic_gateway_device import GenericGatewayDevice
 
 logger = logging.getLogger(__name__)

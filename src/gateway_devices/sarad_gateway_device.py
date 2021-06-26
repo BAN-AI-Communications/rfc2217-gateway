@@ -1,11 +1,9 @@
 """SARAD instruments with integrated FT232 USB serial converter"""
-
 import logging
 from typing import Type
 
-from sarad.cluster import SaradCluster
-
 from gateway_devices.generic_gateway_device import GenericGatewayDevice
+from sarad.cluster import SaradCluster
 
 logger = logging.getLogger(__name__)
 

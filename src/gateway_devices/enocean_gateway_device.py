@@ -1,5 +1,4 @@
 """Devices from EnOcean GmbH"""
-
 import logging
 from typing import Type
 
